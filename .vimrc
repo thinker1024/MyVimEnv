@@ -1,6 +1,7 @@
 "Enable syntax highlight
 syntax enable
 syntax on
+colorscheme desert
 
 "Highlight current line
 au WinLeave * set nocursorline nocursorcolumn
@@ -13,8 +14,8 @@ let Tlist_Show_One_File=1
 let Tlist_Exit_OnlyWindow=1
 let Tlist_Use_Right_Window =1
 let Tlist_WinWidth = 31
-noremap <F8> :TlistToggle<CR>
-noremap <F6> :!ctags -R<CR>
+noremap <C-F8> :TlistToggle<CR>
+noremap <C-F6> :!ctags -R<CR>
 
 "NERD Tree
 let NERDChristmasTree=1
@@ -27,10 +28,10 @@ let NERDTreeShowHidden=1
 let NERDTreeShowLineNumbers=1
 let NERDTreeWinPos='left'
 let NERDTreeWinSize=31
-noremap <F7> :NERDTreeToggle<CR>
+noremap <C-F7> :NERDTreeToggle<CR>
 
 "Cscope quickfix window
-:set cscopequickfix=s-,c-,d-,i-,t-,e-
+set cscopequickfix=s-,c-,d-,i-,t-,e-
 nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
@@ -45,5 +46,7 @@ let g:miniBufExplMapWindowNavArrows = 1
 let g:miniBufExplMapCTabSwitchBufs = 1 
 let g:miniBufExplModSelTarget = 1 
 
+
 "Command
-:set number
+set number
+set mouse=a
