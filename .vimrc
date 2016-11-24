@@ -3,6 +3,19 @@ syntax enable
 syntax on
 colorscheme desert
 
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+if has("autocmd")
+	au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") |
+				\	exe "normal! g'\"" | endif
+endif
+
+" Uncomment the following to have Vim load indentation rules and plugins
+" according to the detected filetype.
+if has("autocmd")
+	filetype plugin indent on
+endif
+
 "Highlight current line
 au WinLeave * set nocursorline nocursorcolumn
 au WinEnter * set cursorline cursorcolumn
@@ -48,5 +61,6 @@ let g:miniBufExplModSelTarget = 1
 
 
 "Command
-set number
-set mouse=a
+set number      " Show column number
+set mouse=a     " Enable mouse usage (all modes)
+set showmatch	" Show matching brackets.
