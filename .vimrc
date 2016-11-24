@@ -64,3 +64,6 @@ let g:miniBufExplModSelTarget = 1
 set number      " Show column number
 set mouse=a     " Enable mouse usage (all modes)
 set showmatch	" Show matching brackets.
+set tags=./tags;/
+set encoding=utf-8
+set termencoding=utf-8
