@@ -67,3 +67,9 @@ set showmatch	" Show matching brackets.
 set tags=./tags;/
 set encoding=utf-8
 set termencoding=utf-8
+set tabstop=4   
+set softtabstop=4   
+set shiftwidth=4   
+set noexpandtab    
+set autoindent  
+set cindent
