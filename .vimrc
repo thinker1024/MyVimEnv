@@ -73,3 +73,8 @@ set shiftwidth=4
 set noexpandtab    
 set autoindent  
 set cindent
+
+"pydiction
+filetype plugin on
+let g:pydiction_location = '~/.vim/complete-dict'
+let g:pydiction_menu_height = 5
