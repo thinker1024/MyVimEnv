@@ -12,11 +12,19 @@ Configure Guide
 
 2. Copy the file named .vimrc to home directory.
 
-`$ git clone git@github.com:logself1988/MyVimEnv.git ~/ && git rm README.md`
+`$ git clone git@github.com:logself1988/MyVimEnv.git ~/ && git rm ~/README.md`
 
 3. Install Plugins.
 
 Launch `vim` and run `:PluginInstall`.
 
+For C/C++
+----
+1. Install Ctags.
 
+`$ sudo apt install exuberant-ctags`
+
+2. Install Cscope.
+
+`$ sudo apt install cscope`
 
