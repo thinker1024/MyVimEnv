@@ -12,7 +12,7 @@ Configure Guide
 
 2. Copy the file named .vimrc to home directory.
 
-`$ git clone git@github.com:logself1988/MyVimEnv.git ~/ && git rm ~/README.md`
+`$ git clone https://github.com/logself1988/MyVimEnv.git && cp MyVimEnv/.vimrc ~/ && rm -rf MyVimEnv`
 
 3. Install Plugins.
 
