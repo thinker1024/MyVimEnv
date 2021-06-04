@@ -22,8 +22,12 @@ Plugin 'vim-scripts/DoxyGen-Syntax'
 Plugin 'vim-scripts/DoxygenToolkit.vim'
 Plugin 'vim-scripts/cscope.vim'
 "Plugin 'vim-syntastic/syntastic'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'rdnetto/YCM-Generator'
+"Plugin 'Valloric/YouCompleteMe'
+"Plugin 'rdnetto/YCM-Generator'
+
+Plugin 'godlygeek/tabular'
+Plugin 'posva/vim-vue'
+Plugin 'pangloss/vim-javascript'
 
 " plugin from http://vim-scripts.org/vim/scripts.html
 " Plugin 'L9'
@@ -123,19 +127,19 @@ nmap <C-\>f :cs find f <C-R>=expand("<cword>")<CR><CR>
 "let g:syntastic_check_on_wq = 0
 
 "YouCompleteMe
-let g:ycm_min_num_of_chars_for_completion = 2
-let g:ycm_show_diagnostics_ui = 1
-let g:ycm_max_num_candidates = 50
-let g:ycm_max_num_identifier_candidates = 10
-let g:ycm_auto_trigger = 1
-let g:ycm_show_diagnostics_ui = 0
-let g:ycm_warning_symbol = '>>'
-let g:ycm_enable_diagnostic_signs = 1
-let g:ycm_enable_diagnostic_highlighting = 1
-let g:ycm_echo_current_diagnostic = 1
-let g:ycm_seed_identifiers_with_syntax=1
-let g:ycm_collect_identifiers_from_tags_files=1
-nnoremap <silent> gb :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"let g:ycm_min_num_of_chars_for_completion = 2
+"let g:ycm_show_diagnostics_ui = 1
+"let g:ycm_max_num_candidates = 50
+"let g:ycm_max_num_identifier_candidates = 10
+"let g:ycm_auto_trigger = 1
+"let g:ycm_show_diagnostics_ui = 0
+"let g:ycm_warning_symbol = '>>'
+"let g:ycm_enable_diagnostic_signs = 1
+"let g:ycm_enable_diagnostic_highlighting = 1
+"let g:ycm_echo_current_diagnostic = 1
+"let g:ycm_seed_identifiers_with_syntax=1
+"let g:ycm_collect_identifiers_from_tags_files=1
+"nnoremap <silent> gb :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 "Command
 set number      " Show column number
@@ -149,5 +153,10 @@ set softtabstop=4
 set shiftwidth=4
 set noexpandtab
 set autoindent
+set smartindent
 set cindent
 set completeopt-=preview  " disable scratch preview
+
+"Doxygen
+let g:DoxygenToolkit_authorName="Tao Yang"
+let g:doxygenToolkit_briefTag_funcName="yes"
