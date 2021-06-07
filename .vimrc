@@ -25,9 +25,9 @@ Plugin 'vim-scripts/cscope.vim'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'rdnetto/YCM-Generator'
 
-Plugin 'godlygeek/tabular'
-Plugin 'posva/vim-vue'
-Plugin 'pangloss/vim-javascript'
+"Plugin 'godlygeek/tabular'
+"Plugin 'posva/vim-vue'
+"Plugin 'pangloss/vim-javascript'
 
 " plugin from http://vim-scripts.org/vim/scripts.html
 " Plugin 'L9'
