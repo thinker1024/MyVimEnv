@@ -21,6 +21,10 @@ Plugin 'vim-scripts/a.vim'
 Plugin 'vim-scripts/DoxyGen-Syntax'
 Plugin 'vim-scripts/DoxygenToolkit.vim'
 Plugin 'vim-scripts/cscope.vim'
+
+"Plugin 'vim-scripts/vim-misc'
+"Plugin 'vim-scripts/vim-session'
+
 "Plugin 'vim-syntastic/syntastic'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'rdnetto/YCM-Generator'
