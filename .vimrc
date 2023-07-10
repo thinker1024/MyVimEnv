@@ -21,10 +21,6 @@ Plugin 'vim-scripts/a.vim'
 Plugin 'vim-scripts/DoxyGen-Syntax'
 Plugin 'vim-scripts/DoxygenToolkit.vim'
 Plugin 'vim-scripts/cscope.vim'
-
-"Plugin 'vim-scripts/vim-misc'
-"Plugin 'vim-scripts/vim-session'
-
 "Plugin 'vim-syntastic/syntastic'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'rdnetto/YCM-Generator'
@@ -83,7 +79,7 @@ if has("autocmd")
 endif
 
 "" Tlist config
-""let Tlist_Auto_Open = 1
+"let Tlist_Auto_Open = 1
 "let Tlist_Show_One_File=1
 "let Tlist_Exit_OnlyWindow=1
 "let Tlist_Use_Right_Window =1
@@ -95,8 +91,8 @@ endif
 let g:tagbar_autopreview = 1
 let g:tagbar_sort = 0
 let g:tagbar_width = 31
-noremap <C-F8> :TagbarToggle<CR>
-noremap <C-F6> :!ctags -R<CR>
+"noremap <C-F8> :TagbarToggle<CR>
+"noremap <C-F6> :!ctags -R<CR>
 
 " NERD Tree
 let NERDChristmasTree=1
@@ -109,7 +105,34 @@ let NERDTreeShowHidden=1
 let NERDTreeShowLineNumbers=1
 let NERDTreeWinPos='left'
 let NERDTreeWinSize=31
-noremap <C-F7> :NERDTreeToggle<CR>
+"noremap <C-F7> :NERDTreeToggle<CR>
+" Check if NERDTree is open or active
+function! IsNERDTreeOpen()
+  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
+" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
+" file, and we're not in vimdiff
+function! SyncTree()
+  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+    NERDTreeFind
+    wincmd p
+  endif
+endfunction
+" Highlight currently open buffer in NERDTree
+autocmd BufEnter * call SyncTree()
+
+function! ToggleNerdTreeAndTagbar()
+  set eventignore=BufEnter
+  TagbarToggle
+  NERDTreeToggle
+  if IsNERDTreeOpen()
+	wincmd w
+	NERDTreeFind
+	wincmd p
+  endif
+  set eventignore=
+endfunction
+nmap <C-F7> :call ToggleNerdTreeAndTagbar()<CR>
 
 "Cscope quickfix window
 set cscopequickfix=s-,c-,d-,i-,t-,e-
@@ -160,6 +183,8 @@ set autoindent
 set smartindent
 set cindent
 set completeopt-=preview  " disable scratch preview
+
+set sessionoptions-=blank
 
 "Doxygen
 let g:DoxygenToolkit_authorName="Tao Yang"
