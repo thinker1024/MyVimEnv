@@ -144,6 +144,10 @@ nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>f :cs find f <C-R>=expand("<cword>")<CR><CR>
 
+"Doxygen
+let g:DoxygenToolkit_authorName="Tao Yang"
+let g:doxygenToolkit_briefTag_funcName="yes"
+
 "syntastic
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
@@ -186,6 +190,7 @@ set completeopt-=preview  " disable scratch preview
 
 set sessionoptions-=blank
 
-"Doxygen
-let g:DoxygenToolkit_authorName="Tao Yang"
-let g:doxygenToolkit_briefTag_funcName="yes"
+"Status bar
+set laststatus=2
+set statusline=[%F]%y%r%m%*%=[Line:%l/%L,Column:%c][%p%%]
+set ruler
