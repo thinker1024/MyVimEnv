@@ -14,6 +14,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
 " Plugin 'tpope/vim-fugitive'
+Plugin 'iamcco/markdown-preview.nvim'
 Plugin 'preservim/nerdtree'
 "Plugin 'vim-scripts/The-NERD-tree'
 "Plugin 'vim-scripts/taglist.vim'
@@ -22,6 +23,7 @@ Plugin 'vim-scripts/a.vim'
 Plugin 'vim-scripts/DoxyGen-Syntax'
 Plugin 'vim-scripts/DoxygenToolkit.vim'
 Plugin 'vim-scripts/cscope.vim'
+Plugin 'vim-scripts/Mark'
 "Plugin 'vim-syntastic/syntastic'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'rdnetto/YCM-Generator'
@@ -140,6 +142,10 @@ autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_
     \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
 "Cscope quickfix window
+if filereadable("cscope.out")
+    cs add cscope.out
+endif
+
 set cscopequickfix=s-,c-,d-,i-,t-,e-
 nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
@@ -150,6 +156,7 @@ nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>f :cs find f <C-R>=expand("<cword>")<CR><CR>
 
 "Doxygen
+set syntax=cpp.doxygen
 let g:DoxygenToolkit_authorName="Tao Yang"
 let g:doxygenToolkit_briefTag_funcName="yes"
 
@@ -194,6 +201,9 @@ set cindent
 set completeopt-=preview  " disable scratch preview
 
 set sessionoptions-=blank
+
+"add file search path
+set path+=**
 
 "Status bar
 set laststatus=2
