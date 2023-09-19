@@ -27,7 +27,10 @@ Plugin 'vim-scripts/Mark'
 "Plugin 'vim-syntastic/syntastic'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'rdnetto/YCM-Generator'
-
+Plugin 'zhuzhzh/verilog_emacsauto.vim'
+Plugin 'vim-scripts/verilog.vim'
+Plugin 'vim-autoformat/vim-autoformat'
+"Plugin 'dense-analysis/ale'
 "Plugin 'godlygeek/tabular'
 "Plugin 'posva/vim-vue'
 "Plugin 'pangloss/vim-javascript'
@@ -153,7 +156,8 @@ nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-nmap <C-\>f :cs find f <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-\>i :cs find i <C-R>=expand("<cfile>")<CR><CR>
 
 "Doxygen
 set syntax=cpp.doxygen
@@ -199,6 +203,8 @@ set autoindent
 set smartindent
 set cindent
 set completeopt-=preview  " disable scratch preview
+
+set hlsearch
 
 set sessionoptions-=blank
 
