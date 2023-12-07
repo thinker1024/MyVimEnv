@@ -149,8 +149,10 @@ if filereadable("cscope.out")
     cs add cscope.out
 endif
 
-set cscopequickfix=s-,c-,d-,i-,t-,e-
-nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+"关闭Ctrl-\ c，推荐使用Ctrl-\ t，因为c c++混合编程中，查字符串更全面，不会遗漏
+"set cscopequickfix=s-,c-,d-,i-,t-,e-
+"nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+set cscopequickfix=s-,d-,i-,t-,e-
 nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
@@ -205,7 +207,6 @@ set cindent
 set completeopt-=preview  " disable scratch preview
 
 set hlsearch
-
 set sessionoptions-=blank
 
 "add file search path
