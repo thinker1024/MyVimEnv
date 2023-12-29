@@ -1,209 +1,22 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-" Plugin 'tpope/vim-fugitive'
-Plugin 'iamcco/markdown-preview.nvim'
-Plugin 'preservim/nerdtree'
-"Plugin 'vim-scripts/The-NERD-tree'
-"Plugin 'vim-scripts/taglist.vim'
-Plugin 'vim-scripts/Tagbar'
-Plugin 'vim-scripts/a.vim'
-Plugin 'vim-scripts/DoxyGen-Syntax'
-Plugin 'vim-scripts/DoxygenToolkit.vim'
-Plugin 'vim-scripts/cscope.vim'
-Plugin 'vim-scripts/Mark'
-"Plugin 'vim-syntastic/syntastic'
-"Plugin 'Valloric/YouCompleteMe'
-"Plugin 'rdnetto/YCM-Generator'
-Plugin 'zhuzhzh/verilog_emacsauto.vim'
-Plugin 'vim-scripts/verilog.vim'
-Plugin 'vim-autoformat/vim-autoformat'
-"Plugin 'dense-analysis/ale'
-"Plugin 'godlygeek/tabular'
-"Plugin 'posva/vim-vue'
-"Plugin 'pangloss/vim-javascript'
-
-" plugin from http://vim-scripts.org/vim/scripts.html
-" Plugin 'L9'
-"
-" Git plugin not hosted on GitHub
-" Plugin 'git://git.wincent.com/command-t.git'
-"
-" git repos on your local machine (i.e. when working on your own plugin)
-" Plugin 'file:///home/gmarik/path/to/plugin'
-"
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-" Plugin 'ascenator/L9', {'name': 'newL9'}
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-"
-
-" Enable syntax highlight
-syntax enable
-syntax on
-
-" Uncomment the following to have Vim jump to the last position when
-" reopening a file
-if has("autocmd")
-	au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") |
-				\	exe "normal! g'\"" | endif
-endif
-
-" Uncomment the following to have Vim load indentation rules and plugins
-" according to the detected filetype.
-if has("autocmd")
-	filetype plugin indent on
-endif
-
-"" Tlist config
-"let Tlist_Auto_Open = 1
-"let Tlist_Show_One_File=1
-"let Tlist_Exit_OnlyWindow=1
-"let Tlist_Use_Right_Window =1
-"let Tlist_WinWidth = 31
-"noremap <C-F8> :TlistToggle<CR>
-"noremap <C-F6> :!ctags -R<CR>
-
-" Tagbar
-let g:tagbar_autopreview = 1
-let g:tagbar_sort = 0
-let g:tagbar_width = 31
-"noremap <C-F8> :TagbarToggle<CR>
-"noremap <C-F6> :!ctags -R<CR>
-
-" NERD Tree
-let NERDChristmasTree=1
-let NERDTreeAutoCenter=1
-let NERDTreeBookmarksFile=$VIM.'\Data\NerdBookmarks.txt'
-let NERDTreeMouseMode=2
-let NERDTreeShowBookmarks=1
-let NERDTreeShowFiles=1
-let NERDTreeShowHidden=1
-let NERDTreeShowLineNumbers=1
-let NERDTreeWinPos='left'
-let NERDTreeWinSize=31
-"noremap <C-F7> :NERDTreeToggle<CR>
-" Check if NERDTree is open or active
-function! IsNERDTreeOpen()
-  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
-endfunction
-" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
-" file, and we're not in vimdiff
-function! SyncTree()
-  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-    NERDTreeFind
-    wincmd p
-  endif
-endfunction
-" Highlight currently open buffer in NERDTree
-autocmd BufEnter * call SyncTree()
-
-function! ToggleNerdTreeAndTagbar()
-  set eventignore=BufEnter
-  TagbarToggle
-  NERDTreeToggle
-  if IsNERDTreeOpen()
-	wincmd w
-	NERDTreeFind
-	wincmd p
-  endif
-  set eventignore=
-endfunction
-nmap <C-F7> :call ToggleNerdTreeAndTagbar()<CR>
-
-" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-
-"Cscope quickfix window
-if filereadable("cscope.out")
-    cs add cscope.out
-endif
-
-"关闭Ctrl-\ c，推荐使用Ctrl-\ t，因为c c++混合编程中，查字符串更全面，不会遗漏
-"set cscopequickfix=s-,c-,d-,i-,t-,e-
-"nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-set cscopequickfix=s-,d-,i-,t-,e-
-nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
-nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-nmap <C-\>i :cs find i <C-R>=expand("<cfile>")<CR><CR>
-
-"Doxygen
-set syntax=cpp.doxygen
-let g:DoxygenToolkit_authorName="Tao Yang"
-let g:doxygenToolkit_briefTag_funcName="yes"
-
-"syntastic
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-
-"YouCompleteMe
-"let g:ycm_min_num_of_chars_for_completion = 2
-"let g:ycm_show_diagnostics_ui = 1
-"let g:ycm_max_num_candidates = 50
-"let g:ycm_max_num_identifier_candidates = 10
-"let g:ycm_auto_trigger = 1
-"let g:ycm_show_diagnostics_ui = 0
-"let g:ycm_warning_symbol = '>>'
-"let g:ycm_enable_diagnostic_signs = 1
-"let g:ycm_enable_diagnostic_highlighting = 1
-"let g:ycm_echo_current_diagnostic = 1
-"let g:ycm_seed_identifiers_with_syntax=1
-"let g:ycm_collect_identifiers_from_tags_files=1
-"nnoremap <silent> gb :YcmCompleter GoToDefinitionElseDeclaration<CR>
-
 "Command
+set nocompatible
+syntax enable
+filetype on
+filetype plugin on
+filetype indent on
+set autoindent
+autocmd BufEnter * :syntax sync fromstart
+
 set number      " Show column number
 set mouse=a     " Enable mouse usage (all modes)
 set showmatch	" Show matching brackets.
-"set tags=./tags;/
 set encoding=utf-8
 set termencoding=utf-8
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
-set autoindent
 set smartindent
-set cindent
 set completeopt-=preview  " disable scratch preview
 
 set hlsearch
@@ -216,3 +29,306 @@ set path+=**
 set laststatus=2
 set statusline=[%F]%y%r%m%*%=[Line:%l/%L,Column:%c][%p%%]
 set ruler
+
+"plugin
+call plug#begin()
+" The default plugin directory will be as follows:
+"   - Vim (Linux/macOS): '~/.vim/plugged'
+"   - Vim (Windows): '~/vimfiles/plugged'
+"   - Neovim (Linux/macOS/Windows): stdpath('data') . '/plugged'
+" You can specify a custom plugin directory by passing it as the argument
+"   - e.g. `call plug#begin('~/.vim/plugged')`
+"   - Avoid using standard Vim directory names like 'plugin'
+
+" Make sure you use single quotes
+
+" Use release branch (recommend)
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" fzf
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" cscope
+Plug 'vim-scripts/cscope.vim'
+
+" markdown preview
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
+
+"color scheme
+Plug 'joshdick/onedark.vim'
+
+"DoxyGen
+Plug 'vim-scripts/DoxyGen-Syntax'
+Plug 'vim-scripts/DoxygenToolkit.vim'
+
+"polyglot, a collection of language packs for Vim
+Plug 'sheerun/vim-polyglot'
+
+" Initialize plugin system
+call plug#end()
+
+let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-pyright', 'coc-explorer']
+
+" May need for Vim (not Neovim) since coc.nvim calculates byte offset by count
+" utf-8 byte sequence
+set encoding=utf-8
+" Some servers have issues with backup files, see #649
+set nobackup
+set nowritebackup
+
+" Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
+" delays and poor user experience
+set updatetime=300
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s)
+  autocmd FileType c,cpp,typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Applying code actions to the selected code block
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying code actions at the cursor position
+nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+" Remap keys for apply code actions affect whole buffer
+nmap <leader>as  <Plug>(coc-codeaction-source)
+" Apply the most preferred quickfix action to fix diagnostic on the current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Remap keys for applying refactor code actions
+nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
+xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+
+" Run the Code Lens action on the current line
+nmap <leader>cl  <Plug>(coc-codelens-action)
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+" Remap <C-f> and <C-b> to scroll float windows/popups
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+
+" Use CTRL-S for selections ranges
+" Requires 'textDocument/selectionRange' support of language server
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
+
+" Add `:Format` command to format current buffer
+command! -nargs=0 Format :call CocActionAsync('format')
+
+" Add `:Fold` command to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer
+command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+" Add (Neo)Vim's native statusline support
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Mappings for CoCList
+" Show all diagnostics
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item
+nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item
+nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+"popup color cfg
+"colors ron
+"hi Pmenu ctermfg=7 ctermbg=236
+"hi PmenuSel ctermfg=white ctermbg=32
+"hi CocFloating ctermfg=black ctermbg=240
+
+"coc-explorer
+nnoremap <silent> <Space>e :CocCommand explorer<CR>
+let g:coc_explorer_width = 30
+let g:coc_explorer_split_direction = 'left'
+
+"coc-clangd
+" Use clangd as the C/C++ language server
+"let g:coc_clangd_args = ['--compile-commands-dir', 'current']
+" Enable coc.nvim for C/C++ files
+"augroup cland_group
+"  autocmd!
+"  autocmd FileType c,cpp nnoremap <buffer> <leader>cf :CocCommand clangd.restart<CR>
+"augroup end
+
+"coc-pyright
+"augroup pyright_group
+"    autocmd!
+"    autocmd FileType python setlocal formatexpr=CocAction('formatSelected')
+"    autocmd FileType python nnoremap <buffer> <leader>cf <Plug>(coc-format-selected)
+"    autocmd FileType python let b:coc_root_patterns = ['.git', '.env']
+"augroup end
+
+"fzf
+" Invoke fzf for files using <leader>ff
+nnoremap <leader>ff :Files<CR>
+
+" Invoke fzf for buffers using <leader>fb
+nnoremap <leader>fb :Buffers<CR>
+
+" Invoke fzf for history using <leader>fh
+"nnoremap <leader>fh :History<CR>
+
+" Invoke fzf for git files using <leader>fg
+"nnoremap <leader>fg :GFiles<CR>
+
+" Invoke fzf for grep using <leader>fg
+"nnoremap <leader>fr :Rg<Space>
+
+" Invoke fzf for tags using <leader>ft
+"nnoremap <leader>ft :Tags<CR>
+
+" Set fzf options
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+
+" Use ripgrep as the default search tool for fzf
+"let g:fzf_command_prefix = 'rg --ignore-case --hidden --files'
+
+" Preview window configuration
+let g:fzf_preview_window = 'right:50%'
+
+" Customize colors
+highlight Fzf1 guifg=#d79921
+highlight Fzf2 guifg=#83a598
+highlight Fzf3 guifg=#b8bb26
+highlight Fzf4 guifg=#928374
+highlight FzfPrompt guifg=#d79921
+
+"cscope
+if filereadable("cscope.out")
+    cs add cscope.out
+endif
+"C++工程查看调用函数尽量不使用Ctrl-\ c，推荐使用Ctrl-\ t，因为c c++混合编程中，查字符串更全面，不会遗漏
+set cscopequickfix=s-,c-,d-,i-,t-,e-
+nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-\>i :cs find i <C-R>=expand("<cfile>")<CR><CR>
+
+"colorscheme
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+"if (empty($TMUX))
+"  if (has("nvim"))
+"    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+"    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+"  endif
+"  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+"  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+"  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+"  if (has("termguicolors"))
+"    set termguicolors
+"  endif
+"endif
+syntax on
+colorscheme onedark
+
+"Doxygen
+set syntax=cpp.doxygen
+let g:DoxygenToolkit_authorName="Tao Yang"
+let g:doxygenToolkit_briefTag_funcName="yes"
