@@ -16,7 +16,7 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
-set smartindent
+set autoindent
 set completeopt-=preview  " disable scratch preview
 
 set hlsearch
@@ -25,10 +25,17 @@ set sessionoptions-=blank
 "add file search path
 set path+=**
 
-"Status bar
-set laststatus=2
-set statusline=[%F]%y%r%m%*%=[Line:%l/%L,Column:%c][%p%%]
-set ruler
+"Status bar, using vim-airline plugin instead
+"set laststatus=2
+"set statusline=[%F]%y%r%m%*%=[Line:%l/%L,Column:%c][%p%%]
+"set ruler
+
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+if has("autocmd")
+	au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") |
+				\	exe "normal! g'\"" | endif
+endif
 
 "plugin
 call plug#begin()
@@ -44,6 +51,9 @@ call plug#begin()
 
 " Use release branch (recommend)
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" airline
+Plug 'vim-airline/vim-airline'
 
 " fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -64,6 +74,15 @@ Plug 'vim-scripts/DoxygenToolkit.vim'
 
 "polyglot, a collection of language packs for Vim
 Plug 'sheerun/vim-polyglot'
+
+"ctags
+Plug 'liuchengxu/vista.vim'
+
+"verilog and system verilog syntax check
+Plug 'vhda/verilog_systemverilog.vim'
+
+"ALE
+Plug 'dense-analysis/ale'
 
 " Initialize plugin system
 call plug#end()
@@ -237,8 +256,13 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 "hi PmenuSel ctermfg=white ctermbg=32
 "hi CocFloating ctermfg=black ctermbg=240
 
+"airline
+let g:airline_style = 'simplified'
+let g:airline_section_warning = 0
+let g:airline_section_error = 0
+
 "coc-explorer
-nnoremap <silent> <Space>e :CocCommand explorer<CR>
+nnoremap <silent> <Space>f :CocCommand explorer<CR>
 let g:coc_explorer_width = 30
 let g:coc_explorer_split_direction = 'left'
 
@@ -267,16 +291,16 @@ nnoremap <leader>ff :Files<CR>
 nnoremap <leader>fb :Buffers<CR>
 
 " Invoke fzf for history using <leader>fh
-"nnoremap <leader>fh :History<CR>
+nnoremap <leader>fh :History<CR>
 
 " Invoke fzf for git files using <leader>fg
-"nnoremap <leader>fg :GFiles<CR>
+nnoremap <leader>fg :GFiles<CR>
 
 " Invoke fzf for grep using <leader>fg
-"nnoremap <leader>fr :Rg<Space>
+nnoremap <leader>fr :Rg<Space>
 
 " Invoke fzf for tags using <leader>ft
-"nnoremap <leader>ft :Tags<CR>
+nnoremap <leader>ft :Tags<CR>
 
 " Set fzf options
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
@@ -332,3 +356,54 @@ colorscheme onedark
 set syntax=cpp.doxygen
 let g:DoxygenToolkit_authorName="Tao Yang"
 let g:doxygenToolkit_briefTag_funcName="yes"
+
+"vista.vim ctags
+function! NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
+
+set statusline+=%{NearestMethodOrFunction()}
+
+" By default vista.vim never run if you don't call it explicitly.
+"
+" If you want to show the nearest function in your statusline automatically,
+" you can add the following line to your vimrc
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_default_executive = 'ctags'
+" To enable fzf's preview window set g:vista_fzf_preview.
+" The elements of g:vista_fzf_preview will be passed as arguments to fzf#vim#with_preview()
+" For example:
+let g:vista_fzf_preview = ['right:50%']
+" Ensure you have installed some decent font to show these pretty symbols, then you can enable icon for the kind.
+let g:vista#renderer#enable_icon = 1
+" The default icons can't be suitable for all the filetypes, you can extend it as you wish.
+let g:vista#renderer#icons = {
+\   "function": "\uf794",
+\   "variable": "\uf71b",
+\  }
+nnoremap <silent> <Space>t :Vista!!<CR>
+
+"verilog_systemverilog
+
+"ALE
+" Enable ALE
+let g:ale_enabled = 1
+
+" Set the linter for Verilog
+let g:ale_linters = {
+      \ 'verilog': ['verilator'],
+      \ 'systemverilog': ['verilator'],
+      \ }
+
+" Configure Verilator as the Verilog linter
+let g:ale_verilog_verilator_executable = 'verilator'
+let g:ale_verilog_verilator_options = '--lint-only -Wall'
+
+" Specify Verilog file types
+autocmd FileType verilog let b:ale_linters = ['verilator']
+autocmd FileType systemverilog let b:ale_linters = ['verilator']
+
+" Enable linting on save
+let g:ale_lint_on_save = 1
