@@ -75,9 +75,6 @@ Plug 'vim-scripts/DoxygenToolkit.vim'
 "polyglot, a collection of language packs for Vim
 Plug 'sheerun/vim-polyglot'
 
-"ctags
-Plug 'liuchengxu/vista.vim'
-
 "verilog and system verilog syntax check
 Plug 'vhda/verilog_systemverilog.vim'
 
@@ -257,9 +254,11 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 "hi CocFloating ctermfg=black ctermbg=240
 
 "airline
-let g:airline_style = 'simplified'
 let g:airline_section_warning = 0
 let g:airline_section_error = 0
+"show the current function name on status bar
+"need to set "coc.preferences.currentFunctionSymbolAutoUpdate": true in coc-settings.json, Check :h coc_current_function.
+set statusline+=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 "coc-explorer
 nnoremap <silent> <Space>f :CocCommand explorer<CR>
@@ -334,21 +333,6 @@ nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <C-\>i :cs find i <C-R>=expand("<cfile>")<CR><CR>
 
 "colorscheme
-"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
-"if (empty($TMUX))
-"  if (has("nvim"))
-"    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-"    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-"  endif
-"  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-"  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-"  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-"  if (has("termguicolors"))
-"    set termguicolors
-"  endif
-"endif
 syntax on
 colorscheme onedark
 
@@ -356,34 +340,6 @@ colorscheme onedark
 set syntax=cpp.doxygen
 let g:DoxygenToolkit_authorName="Tao Yang"
 let g:doxygenToolkit_briefTag_funcName="yes"
-
-"vista.vim ctags
-function! NearestMethodOrFunction() abort
-  return get(b:, 'vista_nearest_method_or_function', '')
-endfunction
-
-set statusline+=%{NearestMethodOrFunction()}
-
-" By default vista.vim never run if you don't call it explicitly.
-"
-" If you want to show the nearest function in your statusline automatically,
-" you can add the following line to your vimrc
-autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
-
-let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
-let g:vista_default_executive = 'ctags'
-" To enable fzf's preview window set g:vista_fzf_preview.
-" The elements of g:vista_fzf_preview will be passed as arguments to fzf#vim#with_preview()
-" For example:
-let g:vista_fzf_preview = ['right:50%']
-" Ensure you have installed some decent font to show these pretty symbols, then you can enable icon for the kind.
-let g:vista#renderer#enable_icon = 1
-" The default icons can't be suitable for all the filetypes, you can extend it as you wish.
-let g:vista#renderer#icons = {
-\   "function": "\uf794",
-\   "variable": "\uf71b",
-\  }
-nnoremap <silent> <Space>t :Vista!!<CR>
 
 "verilog_systemverilog
 
