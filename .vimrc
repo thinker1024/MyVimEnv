@@ -81,6 +81,9 @@ Plug 'vhda/verilog_systemverilog.vim'
 "ALE
 Plug 'dense-analysis/ale'
 
+"tabular
+Plug 'godlygeek/tabular'
+
 " Initialize plugin system
 call plug#end()
 
