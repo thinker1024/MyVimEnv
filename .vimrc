@@ -300,7 +300,7 @@ nnoremap <leader>fg :GFiles<CR>
 
 " Invoke fzf for grep using <leader>fg
 nnoremap <leader>fr :Rg<Space>
-command! -bang -nargs=* Rg call fzf#vim#grep('rg -u --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Rg call fzf#vim#grep('rg --no-ignore --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
 
 " Invoke fzf for tags using <leader>ft
 nnoremap <leader>ft :Tags<CR>
