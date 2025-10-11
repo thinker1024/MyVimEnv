@@ -1,42 +1,3 @@
-"Command
-set nocompatible
-syntax enable
-filetype on
-filetype plugin on
-filetype indent on
-set autoindent
-autocmd BufEnter * :syntax sync fromstart
-
-set number      " Show column number
-set mouse=a     " Enable mouse usage (all modes)
-set showmatch	" Show matching brackets.
-set encoding=utf-8
-set termencoding=utf-8
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set expandtab
-set autoindent
-set completeopt-=preview  " disable scratch preview
-
-set hlsearch
-set sessionoptions-=blank
-
-"add file search path
-set path+=**
-
-"Status bar, using vim-airline plugin instead
-"set laststatus=2
-"set statusline=[%F]%y%r%m%*%=[Line:%l/%L,Column:%c][%p%%]
-"set ruler
-
-" Uncomment the following to have Vim jump to the last position when
-" reopening a file
-if has("autocmd")
-	au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") |
-				\	exe "normal! g'\"" | endif
-endif
-
 "plugin
 call plug#begin()
 " The default plugin directory will be as follows:
@@ -84,10 +45,13 @@ Plug 'dense-analysis/ale'
 "tabular
 Plug 'godlygeek/tabular'
 
+"GN
+Plug 'https://github.com/kalcutter/vim-gn'
+
 " Initialize plugin system
 call plug#end()
 
-let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-pyright', 'coc-explorer']
+let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-pyright', 'coc-explorer', 'coc-cmake', 'coc-gn']
 
 " May need for Vim (not Neovim) since coc.nvim calculates byte offset by count
 " utf-8 byte sequence
@@ -167,7 +131,7 @@ nmap <leader>f  <Plug>(coc-format-selected)
 augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s)
-  autocmd FileType c,cpp,typescript,json setl formatexpr=CocAction('formatSelected')
+  autocmd FileType c,cpp,typescript,json,python,cmake setl formatexpr=CocAction('formatSelected')
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
@@ -296,7 +260,7 @@ nnoremap <leader>fb :Buffers<CR>
 nnoremap <leader>fh :History<CR>
 
 " Invoke fzf for git files using <leader>fg
-nnoremap <leader>fg :GFiles<CR>
+"nnoremap <leader>fg :GFiles<CR>
 
 " Invoke fzf for grep using <leader>fg
 nnoremap <leader>fr :Rg<Space>
@@ -309,7 +273,7 @@ nnoremap <leader>ft :Tags<CR>
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
 " Use ripgrep as the default search tool for fzf
-"let g:fzf_command_prefix = 'rg --ignore-case --hidden --files'
+"let g:fzf_command_prefix = 'Rg --ignore-case --hidden --files'
 
 " Preview window configuration
 let g:fzf_preview_window = 'right:50%'
@@ -349,12 +313,13 @@ let g:doxygenToolkit_briefTag_funcName="yes"
 
 "ALE
 " Enable ALE
-let g:ale_enabled = 1
+let g:ale_enabled = 0
 
 " Set the linter for Verilog
 let g:ale_linters = {
       \ 'verilog': ['verilator'],
       \ 'systemverilog': ['verilator'],
+      \ 'cmake': ['cmake'],
       \ }
 
 " Configure Verilator as the Verilog linter
@@ -367,3 +332,62 @@ autocmd FileType systemverilog let b:ale_linters = ['verilator']
 
 " Enable linting on save
 let g:ale_lint_on_save = 1
+
+
+autocmd FileType cmake setlocal omnifunc=CocActionAsync
+
+" 禁用 virtualtext
+let g:coc_diagnostic_virtual_text = 0
+
+"Command
+set nocompatible
+syntax enable
+filetype on
+filetype plugin on
+filetype indent on
+set autoindent
+autocmd BufEnter * :syntax sync fromstart
+
+set number      " Show column number
+set mouse=a     " Enable mouse usage (all modes)
+set showmatch	" Show matching brackets.
+set encoding=utf-8
+set termencoding=utf-8
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
+set completeopt-=preview  " disable scratch preview
+
+set hlsearch
+set sessionoptions-=blank
+
+"add file search path
+set path+=**
+
+"Status bar, using vim-airline plugin instead
+"set laststatus=2
+"set statusline=[%F]%y%r%m%*%=[Line:%l/%L,Column:%c][%p%%]
+"set ruler
+
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+if has("autocmd")
+	au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") |
+				\	exe "normal! g'\"" | endif
+endif
+
+" 自动删除行尾空格
+augroup TrimTrailingWhitespace
+  autocmd!
+  autocmd BufWritePre * if &modifiable && &buftype == ''
+        \ | let view = winsaveview()
+        \ | silent! %s/\s\+$//e
+        \ | call winrestview(view)
+        \ | endif
+augroup END
+
+" 显示行尾空格和TAB键
+set list
+set listchars=trail:·,tab:»·
